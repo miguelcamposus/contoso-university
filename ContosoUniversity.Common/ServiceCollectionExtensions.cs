@@ -64,7 +64,8 @@ namespace ContosoUniversity.Common
             }
 
             services.AddScoped<UnitOfWork<ApplicationContext>, UnitOfWork<ApplicationContext>>();
-            services.AddScoped(typeof(IRepository<>), typeof(Repository<,>));
+            // Map IRepository<T> to Repository<T> which uses ApplicationContext under the hood
+            services.AddScoped(typeof(IRepository<>), typeof(ContosoUniversity.Common.Repositories.Repository<>));
 
             services.Configure<SampleData>(configuration.GetSection("SampleData"));
 
