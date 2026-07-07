@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ContosoUniversity.Tests
 {
-    internal class TestAsyncQueryProvider<TEntity> : IAsyncQueryProvider
+    internal class TestAsyncQueryProvider<TEntity> : IQueryProvider
     {
         private readonly IQueryProvider _inner;
 
@@ -40,7 +40,6 @@ namespace ContosoUniversity.Tests
         {
             return new TestAsyncEnumerable<TResult>(expression);
         }
-
         public Task<TResult> ExecuteAsync<TResult>(Expression expression, CancellationToken cancellationToken)
         {
             return Task.FromResult(Execute<TResult>(expression));
@@ -58,6 +57,12 @@ namespace ContosoUniversity.Tests
         { }
 
         public IAsyncEnumerator<T> GetEnumerator()
+        {
+            return new TestAsyncEnumerator<T>(this.AsEnumerable().GetEnumerator());
+        }
+
+        // For .NET's IAsyncEnumerable<T>
+        public IAsyncEnumerator<T> GetAsyncEnumerator(CancellationToken cancellationToken = default)
         {
             return new TestAsyncEnumerator<T>(this.AsEnumerable().GetEnumerator());
         }
@@ -90,9 +95,15 @@ namespace ContosoUniversity.Tests
             }
         }
 
-        public Task<bool> MoveNext(CancellationToken cancellationToken)
+        public ValueTask<bool> MoveNextAsync()
         {
-            return Task.FromResult(_inner.MoveNext());
+            return new ValueTask<bool>(_inner.MoveNext());
+        }
+
+        public ValueTask DisposeAsync()
+        {
+            _inner.Dispose();
+            return new ValueTask();
         }
     }
 }

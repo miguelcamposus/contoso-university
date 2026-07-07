@@ -473,7 +473,8 @@ namespace ContosoUniversity.Web.Tests.Controllers
                       new Mock<IUserClaimsPrincipalFactory<ApplicationUser>>().Object,
                       null,
                       null,
-                      null)
+                      null,
+                      new Mock<IUserConfirmation<ApplicationUser>>().Object)
             { }
 
             // solution from https://github.com/aspnet/Identity/issues/640

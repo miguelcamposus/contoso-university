@@ -1,13 +1,14 @@
 {
-    "projects": [
-        "ContosoUniversity.Web",
-        "ContosoUniversity.Web.Tests",
-        "ContosoUniversity.Api",
-        "ContosoUniversity.Api.Tests",
-        "ContosoUniversity.Data",
-        "ContosoUniversity.Data.Tests"
-    ],
-    "sdk": {
-        "version": "2.1.300"
-    }
+  "projects": [
+    "ContosoUniversity.Web",
+    "ContosoUniversity.Web.Tests",
+    "ContosoUniversity.Api",
+    "ContosoUniversity.Api.Tests",
+    "ContosoUniversity.Data",
+    "ContosoUniversity.Data.Tests"
+  ],
+  "sdk": {
+    "version": "8.0.0",
+    "rollForward": "latestMinor"
+  }
 }
