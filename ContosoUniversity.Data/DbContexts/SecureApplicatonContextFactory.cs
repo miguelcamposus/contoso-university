@@ -25,7 +25,8 @@ namespace ContosoUniversity.Data.DbContexts
             }
             else
             {
-                builder.UseSqlServer(config.GetConnectionString("DefaultConnection"));
+                builder.UseSqlServer(config.GetConnectionString("DefaultConnection"),
+    x => x.EnableRetryOnFailure(5, TimeSpan.FromSeconds(30), null));
 
             }
             return new SecureApplicationContext(builder.Options);

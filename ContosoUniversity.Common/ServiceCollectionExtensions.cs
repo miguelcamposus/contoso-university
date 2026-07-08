@@ -55,17 +55,33 @@ namespace ContosoUniversity.Common
                 {
                     services.AddDbContext<ApplicationContext>(
                         options => options.UseSqlServer(
-                            configuration.GetConnectionString("DefaultConnection"), x => x.MigrationsHistoryTable("Migration", "Contoso")));
+                            configuration.GetConnectionString("DefaultConnection"), x =>
+                            {
+                                x.MigrationsHistoryTable("Migration", "Contoso"); ;
+                                x.EnableRetryOnFailure(5, TimeSpan.FromSeconds(30), null);
+                            }));
 
                     services.AddDbContext<SecureApplicationContext>(
                         options => options.UseSqlServer(
-                            configuration.GetConnectionString("DefaultConnection"), x => x.MigrationsHistoryTable("IdentityMigration", "Contoso")));
+                            configuration.GetConnectionString("DefaultConnection"), x =>
+                            {
+                                x.MigrationsHistoryTable("IdentityMigration", "Contoso"); ;
+                                x.EnableRetryOnFailure(5, TimeSpan.FromSeconds(30), null);
+                            }));
                     services.AddDbContext<WebContext>(
                         options => options.UseSqlServer(
-                            configuration.GetConnectionString("DefaultConnection"), x => x.MigrationsHistoryTable("IdentityMigration", "Contoso")));
+                            configuration.GetConnectionString("DefaultConnection"), x =>
+                            {
+                                x.MigrationsHistoryTable("IdentityMigration", "Contoso"); ;
+                                x.EnableRetryOnFailure(5, TimeSpan.FromSeconds(30), null);
+                            }));
                     services.AddDbContext<ApiContext>(
                         options => options.UseSqlServer(
-                            configuration.GetConnectionString("DefaultConnection"), x => x.MigrationsHistoryTable("IdentityMigration", "Contoso")));
+                            configuration.GetConnectionString("DefaultConnection"), x =>
+                            {
+                                x.MigrationsHistoryTable("IdentityMigration", "Contoso"); ;
+                                x.EnableRetryOnFailure(5, TimeSpan.FromSeconds(30), null);
+                            }));
                 }
             }
 

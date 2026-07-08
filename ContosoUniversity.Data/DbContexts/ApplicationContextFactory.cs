@@ -26,7 +26,11 @@ namespace ContosoUniversity.Data
             }
             else
             {
-                builder.UseSqlServer(config.GetConnectionString("DefaultConnection"), x => x.MigrationsHistoryTable("Migration", "Contoso"));
+                builder.UseSqlServer(config.GetConnectionString("DefaultConnection"), x =>
+                {
+                    x.MigrationsHistoryTable("Migration", "Contoso"); ;
+                    x.EnableRetryOnFailure(5, TimeSpan.FromSeconds(30), null);
+                });
             }
             return new ApplicationContext(builder.Options);
         }
