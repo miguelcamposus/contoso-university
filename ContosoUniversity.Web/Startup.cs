@@ -1,8 +1,9 @@
 ﻿using AutoMapper;
 using ContosoUniversity.Common;
-using ContosoUniversity.Common.Data;
-using ContosoUniversity.Common.Interfaces;
 using ContosoUniversity.Data;
+using ContosoUniversity.Data.DbContexts;
+using Microsoft.EntityFrameworkCore;
+using ContosoUniversity.Common.Interfaces;
 using ContosoUniversity.Web;
 using ContosoUniversity.Web.Helpers;
 using Microsoft.AspNetCore.Builder;
@@ -60,6 +61,10 @@ namespace ContosoUniversity
             {
                 var webContext = scope.ServiceProvider.GetRequiredService<WebContext>();
                 webContext.Database.Migrate();
+                var appContext = scope.ServiceProvider.GetRequiredService<ApplicationContext>();
+                appContext.Database.Migrate();
+                var secureContext = scope.ServiceProvider.GetRequiredService<SecureApplicationContext>();
+                secureContext.Database.Migrate();
             }
             if (env.IsDevelopment())
             {
