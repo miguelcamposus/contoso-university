@@ -38,7 +38,7 @@ namespace ContosoUniversity.Web.Controllers
             }
 
             ViewData["CurrentFilter"] = searchString;
-            var students = from s in _studentRepo.GetAll() select s;
+            IQueryable<Student> students = _studentRepo.GetAll();
 
             if (!String.IsNullOrEmpty(searchString))
             {
@@ -58,14 +58,7 @@ namespace ContosoUniversity.Web.Controllers
                 descending = true;
             }
 
-            if (descending)
-            {
-                students = students.OrderByDescending(e => e.GetType().GetProperty(sortOrder).GetValue(e, null));
-            }
-            else
-            {
-                students = students.OrderBy(e => e.GetType().GetProperty(sortOrder).GetValue(e, null));
-            }
+            students = ApplySort(students, sortOrder, descending);
 
             int pageSize = 3;
 
@@ -213,6 +206,22 @@ namespace ContosoUniversity.Web.Controllers
             {
                 return RedirectToAction("Delete", new { id = id, saveChangesError = true });
             }
+        }
+
+        private static IQueryable<Student> ApplySort(IQueryable<Student> students, string sortOrder, bool descending)
+        {
+            return sortOrder switch
+            {
+                "EnrollmentDate" => descending
+                    ? students.OrderByDescending(s => s.EnrollmentDate)
+                    : students.OrderBy(s => s.EnrollmentDate),
+                "FirstMidName" => descending
+                    ? students.OrderByDescending(s => s.FirstMidName)
+                    : students.OrderBy(s => s.FirstMidName),
+                _ => descending
+                    ? students.OrderByDescending(s => s.LastName)
+                    : students.OrderBy(s => s.LastName)
+            };
         }
 
         private bool StudentExists(int id)

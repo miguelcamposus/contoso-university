@@ -51,6 +51,18 @@ namespace ContosoUniversity.Web.Tests.Controllers
         }
 
         [Theory]
+        [InlineData("LastName")]
+        [InlineData("LastName_desc")]
+        [InlineData("EnrollmentDate")]
+        [InlineData("EnrollmentDate_desc")]
+        public async Task Index_WithSupportedSortOrders_ReturnsAViewResult(string sortOrder)
+        {
+            var result = await sut.Index(sortOrder, null, null, null);
+
+            Assert.IsType<ViewResult>(result);
+        }
+
+        [Theory]
         [InlineData(1, "Alexander")]
         public async Task Details_ReturnsAViewResult_WithStudentModel(int id, string lastName)
         {
