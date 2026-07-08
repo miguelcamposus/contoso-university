@@ -3,8 +3,14 @@ using ContosoUniversity.Data.DbContexts;
 using ContosoUniversity.Data.Entities;
 using ContosoUniversity.Common.Interfaces;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authentication.Google;
+using Microsoft.AspNetCore.Authentication.Facebook;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -22,7 +28,7 @@ namespace ContosoUniversity.Common
     // http://odetocode.com/blogs/scott/archive/2016/08/30/keeping-a-clean-startup-cs-in-asp-net-core.aspx
     public static class ServiceCollectionExtensions
     {
-        public static IServiceCollection AddCustomizedContext(this IServiceCollection services, IConfiguration configuration, IHostingEnvironment env)
+        public static IServiceCollection AddCustomizedContext(this IServiceCollection services, IConfiguration configuration, IWebHostEnvironment env)
         {
             if (env.IsEnvironment("Testing"))
             {
@@ -73,7 +79,7 @@ namespace ContosoUniversity.Common
         }
 
 
-        public static IServiceCollection AddCustomizedMvc(this IServiceCollection services, IHostingEnvironment env)
+        public static IServiceCollection AddCustomizedMvc(this IServiceCollection services, IWebHostEnvironment env)
         {
             services.AddMvc();
 
@@ -90,7 +96,7 @@ namespace ContosoUniversity.Common
 
         // identity 2.0
         // oauth - facebook, google
-        public static IServiceCollection AddCustomizedIdentity(this IServiceCollection services, IConfiguration configuration, IHostingEnvironment env)
+        public static IServiceCollection AddCustomizedIdentity(this IServiceCollection services, IConfiguration configuration, IWebHostEnvironment env)
         {
             // Add default identity options for ApplicationUser and IdentityRole
             var identity = services.AddIdentity<ApplicationUser, IdentityRole>();

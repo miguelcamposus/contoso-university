@@ -62,7 +62,8 @@ namespace ContosoUniversity.Data
         
         public async Task<int> ExecuteSqlCommandAsync(string queryString)
         {
-            return await context.Database.ExecuteSqlCommandAsync(queryString);
+            // EF Core 3+ renamed ExecuteSqlCommandAsync to ExecuteSqlRawAsync
+            return await context.Database.ExecuteSqlRawAsync(queryString);
         }
 
         public DbConnection GetDbConnection()

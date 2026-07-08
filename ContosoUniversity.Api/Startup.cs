@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -9,6 +10,7 @@ using ContosoUniversity.Common;
 using ContosoUniversity.Common.Data;
 using ContosoUniversity.Common.Interfaces;
 using Swashbuckle.AspNetCore.Swagger;
+using Microsoft.OpenApi.Models;
 using AutoMapper;
 using ContosoUniversity.Data.DbContexts;
 
@@ -17,9 +19,9 @@ namespace ContosoUniversity.Api
     public class Startup
     {
         public IConfiguration Configuration { get; }
-        public IHostingEnvironment CurrentEnvironment { get; }
+        public IWebHostEnvironment CurrentEnvironment { get; }
 
-        public Startup(IHostingEnvironment env, IConfiguration config)
+        public Startup(IWebHostEnvironment env, IConfiguration config)
         {
             CurrentEnvironment = env;
             Configuration = config;
@@ -35,7 +37,7 @@ namespace ContosoUniversity.Api
                 .AddCustomizedMvc(CurrentEnvironment)
                 .AddSwaggerGen(c =>
                 {
-                    c.SwaggerDoc("v1", new Info { Title = "Contoso University Api", Version = "v1" });
+                    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Contoso University Api", Version = "v1" });
                 });
 
             services.AddCustomizedApiAuthentication(Configuration);
@@ -43,7 +45,7 @@ namespace ContosoUniversity.Api
             services.AddScoped<IDbInitializer, ApiInitializer>();
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, IDbInitializer dbInitializer)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory, IDbInitializer dbInitializer)
         {
             if (CurrentEnvironment.IsDevelopment())
             {
@@ -54,15 +56,22 @@ namespace ContosoUniversity.Api
             // {
             //     app.UseRewriter(new RewriteOptions().AddRedirectToHttps());
             // }
-            app.UseAuthentication()
-                .UseDefaultFiles()
-                .UseStaticFiles()
-                .UseSwagger()
-                .UseSwaggerUI(c =>
-                {
-                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Contoso API V1");
-                })
-                .UseMvcWithDefaultRoute();
+            app.UseDefaultFiles();
+            app.UseStaticFiles();
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Contoso API V1");
+            });
+
+            app.UseRouting();
+            app.UseAuthentication();
+            app.UseAuthorization();
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+            });
         }
 
         public void ConfigureTesting(IApplicationBuilder app, IDbInitializer dbInitializer)
