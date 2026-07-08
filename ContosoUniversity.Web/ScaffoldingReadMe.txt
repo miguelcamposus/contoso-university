@@ -19,7 +19,7 @@ However you may still need to do make changes to your project.
         public void ConfigureServices(IServiceCollection services)
         {
             // Add framework services.
-            services.AddMvc();
+            services.AddMvc(options => options.EnableEndpointRouting = false);
        }
 
     1.3 Configure web app to use use Configuration and use MVC routing:

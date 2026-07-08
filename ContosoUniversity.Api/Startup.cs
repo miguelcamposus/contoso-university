@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Rewrite;
+using Microsoft.AspNetCore.Hosting;
 using ContosoUniversity.Common;
 using ContosoUniversity.Common.Data;
 using ContosoUniversity.Common.Interfaces;
@@ -42,7 +43,7 @@ namespace ContosoUniversity.Api
             services.AddScoped<IDbInitializer, ApiInitializer>();
         }
 
-        public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory, IDbInitializer dbInitializer)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, IDbInitializer dbInitializer)
         {
             if (CurrentEnvironment.IsDevelopment())
             {

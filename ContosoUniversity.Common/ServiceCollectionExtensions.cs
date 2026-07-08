@@ -75,7 +75,7 @@ namespace ContosoUniversity.Common
 
         public static IServiceCollection AddCustomizedMvc(this IServiceCollection services, IHostingEnvironment env)
         {
-            services.AddMvc();
+            services.AddMvc(options => options.EnableEndpointRouting = false);
 
             // if (env.IsProduction())
             // {
