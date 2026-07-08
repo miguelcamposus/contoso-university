@@ -61,11 +61,11 @@ namespace ContosoUniversity
             using (var scope = app.ApplicationServices.CreateScope())
             {
                 var webContext = scope.ServiceProvider.GetRequiredService<WebContext>();
-                webContext.Database.Migrate();
+                webContext.Database.EnsureCreated();
                 var appContext = scope.ServiceProvider.GetRequiredService<ApplicationContext>();
-                appContext.Database.Migrate();
+                appContext.Database.EnsureCreated();
                 var secureContext = scope.ServiceProvider.GetRequiredService<SecureApplicationContext>();
-                secureContext.Database.Migrate();
+                secureContext.Database.EnsureCreated();
             }
             if (env.IsDevelopment())
             {
