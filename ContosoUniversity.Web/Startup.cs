@@ -74,8 +74,23 @@ namespace ContosoUniversity
             }
 
             app.UseStaticFiles();
+
+            // Endpoint routing (required for ASP.NET Core 3.0+ / .NET Core 3+)
+            app.UseRouting();
+
             app.UseAuthentication();
-            app.UseMvcWithDefaultRoute();
+            app.UseAuthorization();
+
+            app.UseEndpoints(endpoints =>
+            {
+                // MVC controllers
+                endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
+
+                // Razor Pages
+                endpoints.MapRazorPages();
+            });
         }
     }
 }
